@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="outer">
+    <div class="inner">
+      <div class="centered">
+
+        <h2 class="ui center aligned icon header">
+          <i class="circular users icon"></i>
+          글자수 카운터
+        </h2>
+        
+        <!--타임라인 입력-->
+        <form action = "/home/write" method = "POST">
+            <div class="ui form" style="margin-top:20px;">
+                <div class="field">
+                    <label>제목</label>
+                    <input name="title" type="text">
+                </div>
+    
+                <div class="field" style="margin-top:30px;">
+                    <label>내용</label>
+                    <textarea type="text" id="content" name="content" rows="3"></textarea>
+                    <p style="margin-top:10px;">단어 수 : <input id="finalcount1" value="0" disabled> 글자 수 : <input id="finalcount2" value="0" disabled> </p>
+                </div>
+                <button type="submit" class="ui primary button">Save</button>
+            </div>
+        </form>
+        <!--타임라인 입력-->
+        
+        <% @posts.each do |p| %>
+            <div class="ui piled segment">
+              <h4 class="ui header"><%= p.title %></h4>
+              <p><%= p.content %></p>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(function() {
+    var wordCounts = {};
+
+    $('#content').each(function() {
+        var input = '#content'
+        word_count(input);
+        word_count2(input);
+
+        $(this).keyup(function() {
+            word_count(input);
+            word_count2(input);
+        })
+
+    });
+
+function word_count(field) {
+        var number = 0;
+        var matches = $(field).val().match(/\s/g);
+        if (matches) {
+            number = matches.length;
+        }
+        wordCounts[field] = number;
+        var finalCount = 0;
+        $.each(wordCounts, function(k, v) {
+            finalCount += v;
+        });
+        $('#finalcount1').val(finalCount)
+    }
+    
+function word_count2(field) {
+        var number = 0;
+        var matches = $(field).val();
+        if (matches) {
+            number = matches.length;
+        }
+        wordCounts[field] = number;
+        var finalCount = 0;
+        $.each(wordCounts, function(k, v) {
+            finalCount += v;
+        });
+        $('#finalcount2').val(finalCount)
+    }    
+});
+</script>
